@@ -1,6 +1,7 @@
 package org.e2e.labe2e02.ride.application;
 
 
+import org.e2e.labe2e02.email.EmailService;
 import org.e2e.labe2e02.ride.domain.Ride;
 import org.e2e.labe2e02.ride.domain.RideService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class RideController {
     public RideController(RideService rideService) {
         this.rideService = rideService;
     }
+
+    @Autowired
+    public EmailService emailService;
 
     @PostMapping()
     public ResponseEntity<Void> passengerBookRide(
@@ -47,6 +51,12 @@ public class RideController {
     ) {
         Page<Ride> response = rideService.getRidesByUser(userId, page, size);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/hola")
+    public ResponseEntity<String> sendEmail(@RequestParam String email) {
+        emailService.sendSimpleMessage(email, "Correo de Prueba", "Este es un correo de prueba");
+        return ResponseEntity.ok("¡Hola mundo!");
     }
 
 
